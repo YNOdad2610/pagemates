@@ -24,6 +24,8 @@ function doPost(e) {
         clean(d.format), clean(d.city), clean(d.source), clean(d.test_id), clean(d.at),
         clean(d.venue)
       ]);
+    } else if (d.type === "removal") {
+      ss.getSheetByName("removals").appendRow([now, clean(d.email), ""]);
     } else if (["page_view", "book_select"].indexOf(d.type) !== -1) {
       ss.getSheetByName("events").appendRow([
         now, d.type, clean(d.book), clean(d.source), clean(d.test_id), clean(d.at)
