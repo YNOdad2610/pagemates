@@ -238,7 +238,7 @@ button.ghost:focus-visible { outline: 3px solid var(--accent); outline-offset: 2
 
   <section class="privacy" id="privacy" aria-labelledby="privacyTitle">
     <h2 id="privacyTitle">Privacy</h2>
-    <p><b>What we collect.</b> The email you enter, the book and time you pick, how you want to meet, and your city and suggested meeting spot if you give them. We also count page visits and book picks, along with which link you came from. We don't use cookies or track you across other sites.</p>
+    <p><b>What we collect.</b> The email you enter, the book and time you pick, how you want to meet, and your city and suggested meeting spot if you give them. We also count page visits and book picks, along with which link you came from. Each visit gets a random visit number so we count it once; we don't use cookies or track you across other sites.</p>
     <p><b>Why.</b> To form your club and email you about it and about Pagemates early access.</p>
     <p><b>Who sees it.</b> Only the people running Pagemates. It's stored in Google Sheets. We don't sell it or share it with anyone else. The page also loads its fonts from Google Fonts.</p>
     <p><b>Removing your email.</b> Enter it below and we'll delete it and everything you submitted with it. You can also reply to any Pagemates email to ask.</p>
@@ -281,6 +281,12 @@ let db = null, user = null, myId = null;
 // Which channel sent this visitor: the ?ad= tag in the link (reddit, flyer, a1 …), else "direct".
 const SOURCE = (new URLSearchParams(location.search).get("ad") || "direct").toLowerCase().replace(/[^a-z0-9_-]/g, "").slice(0, 40) || "direct";
 
+// One id per page load, so Silvio counts a visitor once however many events they send.
+// Random, not stored anywhere: a new visit is a new session.
+const SESSION = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2));
+// Meta's click id, present when the visit came from an ad; Silvio collapses reloads of one click.
+const CLICK_ID = (new URLSearchParams(location.search).get("fbclid") || "").slice(0, 200);
+
 // Google Apps Script web apps don't answer CORS preflights, so posts go as text/plain, no-cors.
 function post(payload) {
   return fetch(CONFIG.SIGNUP_ENDPOINT, {
@@ -291,7 +297,7 @@ function post(payload) {
 }
 
 function track(type, extra) {
-  const ev = { type, test_id: CONFIG.TEST_ID, book: chosen && chosen.id, source: SOURCE, at: new Date().toISOString(), ...extra };
+  const ev = { type, test_id: CONFIG.TEST_ID, book: chosen && chosen.id, source: SOURCE, session: SESSION, click_id: CLICK_ID, at: new Date().toISOString(), ...extra };
   // Funnel events go to the real collector only; the preview records signups alone.
   if (CONFIG.SIGNUP_ENDPOINT && type !== "signup") post(ev).catch(() => {});
 }
@@ -358,7 +364,7 @@ $("join").addEventListener("submit", async (e) => {
     email, book: chosen.id, book_title: chosen.t, slot: chosen.when,
     format: format(), city: $("city").value.trim(), venue: format() === "in-person" ? $("venue").value.trim() : "",
     test_id: CONFIG.TEST_ID, at: new Date().toISOString(),
-    source: SOURCE
+    source: SOURCE, session: SESSION, click_id: CLICK_ID
   };
   const btn = $("joinBtn"); btn.disabled = true; btn.textContent = "Saving your seat…";
   try {

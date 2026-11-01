@@ -22,13 +22,14 @@ function doPost(e) {
       ss.getSheetByName("signups").appendRow([
         now, clean(d.email), clean(d.book), clean(d.book_title), clean(d.slot),
         clean(d.format), clean(d.city), clean(d.source), clean(d.test_id), clean(d.at),
-        clean(d.venue)
+        clean(d.venue), clean(d.session), clean(d.click_id)
       ]);
     } else if (d.type === "removal") {
       ss.getSheetByName("removals").appendRow([now, clean(d.email), ""]);
     } else if (["page_view", "book_select"].indexOf(d.type) !== -1) {
       ss.getSheetByName("events").appendRow([
-        now, d.type, clean(d.book), clean(d.source), clean(d.test_id), clean(d.at)
+        now, d.type, clean(d.book), clean(d.source), clean(d.test_id), clean(d.at),
+        clean(d.session), clean(d.click_id)
       ]);
     }
     return ContentService.createTextOutput("ok");
