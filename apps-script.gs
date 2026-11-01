@@ -21,7 +21,8 @@ function doPost(e) {
     if (d.type === "signup") {
       ss.getSheetByName("signups").appendRow([
         now, clean(d.email), clean(d.book), clean(d.book_title), clean(d.slot),
-        clean(d.format), clean(d.city), clean(d.source), clean(d.test_id), clean(d.at)
+        clean(d.format), clean(d.city), clean(d.source), clean(d.test_id), clean(d.at),
+        clean(d.venue)
       ]);
     } else if (["page_view", "book_select"].indexOf(d.type) !== -1) {
       ss.getSheetByName("events").appendRow([

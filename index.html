@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Pagemates · Pick a book, we'll find your club</title>
-<meta name="description" content="Small book clubs of 4 to 6 readers, matched by book and schedule. Meet on video or at a café near you. First club free.">
+<meta name="description" content="Small book clubs of 4 to 6 readers, matched by book and schedule. Meet on video or in person. Free during early access.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -94,6 +94,8 @@ h1 { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 6vw, 
 
 form.join { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; gap: 12px; }
 form.join[hidden] { display: none; }
+.inperson { display: grid; gap: 12px; }
+.opt { font-weight: 400; color: var(--muted); }
 label { font-size: 14px; font-weight: 600; display: grid; gap: 6px; }
 input[type=email], input[type=text], select {
   font: inherit; font-size: 16px; color: var(--ink); background: var(--paper);
@@ -149,12 +151,12 @@ footer { color: var(--muted); font-size: 13px; padding: 34px 0 40px; }
 <div class="wrap">
   <header>
     <div class="mark">Page<span>mates</span></div>
-    <div class="pill">First club free</div>
+    <div class="pill">Free · early access</div>
   </header>
 
   <section class="hero">
     <h1>Pick a book. We'll find your club.</h1>
-    <p class="sub">Small clubs of 4 to 6 readers, matched by book and schedule. Meet for an hour on video, or around a table at a café near you.</p>
+    <p class="sub">Small clubs of 4 to 6 readers, matched by book and schedule. Meet for an hour on video, or in person somewhere near you.</p>
   </section>
 
   <section class="picker" aria-label="Choose a club">
@@ -186,11 +188,17 @@ footer { color: var(--muted); font-size: 13px; padding: 34px 0 40px; }
       <form class="join" id="join" hidden novalidate>
         <div class="seg" role="radiogroup" aria-label="How do you want to meet?">
           <label for="fmtVideo"><input type="radio" name="format" id="fmtVideo" value="video" checked><span>Video<small>From anywhere</small></span></label>
-          <label for="fmtPerson"><input type="radio" name="format" id="fmtPerson" value="in-person"><span>In person<small>At a partner café</small></span></label>
+          <label for="fmtPerson"><input type="radio" name="format" id="fmtPerson" value="in-person"><span>In person<small>Near you</small></span></label>
         </div>
-        <label for="city" id="cityWrap" hidden>Your city or zip code
-          <input type="text" id="city" autocomplete="postal-code" placeholder="e.g. Brooklyn, 11215">
-        </label>
+        <div id="cityWrap" class="inperson" hidden>
+          <label for="city">Your city
+            <input type="text" id="city" autocomplete="address-level2" placeholder="e.g. Austin, TX">
+          </label>
+          <label for="venue">Suggest a place to meet <span class="opt">(optional)</span>
+            <input type="text" id="venue" maxlength="120" placeholder="A café, bookstore or library you like">
+          </label>
+          <p class="fine">In-person clubs open in cities where enough readers sign up, always at a public place.</p>
+        </div>
         <label for="email">Email
           <input type="email" id="email" autocomplete="email" placeholder="you@example.com" required>
         </label>
@@ -212,10 +220,10 @@ footer { color: var(--muted); font-size: 13px; padding: 34px 0 40px; }
   </section>
 
   <section class="faq" aria-label="Questions">
-    <details><summary>What does it cost?</summary><p>Your first club is free. After that, clubs will be part of a low monthly membership.</p></details>
+    <details><summary>What does it cost?</summary><p>Nothing. Pagemates is free.</p></details>
     <details><summary>What if I fall behind on the reading?</summary><p>Come anyway. Discussions follow the pace in the club card, and spoilers stay out of the early meetings.</p></details>
     <details><summary>Who will be in my club?</summary><p>Readers who chose the same book and the same time slot. Clubs stay small, 4 to 6 people, so everyone gets to talk.</p></details>
-    <details><summary>Where do in-person clubs meet?</summary><p>At partner cafés and bookstores in launch cities. If your city isn't open yet, we'll start you on video and tell you when it is.</p></details>
+    <details><summary>Where do in-person clubs meet?</summary><p>At public places readers suggest: cafés, bookstores, libraries. In-person clubs open in a city once enough readers there sign up. Until then we'll start you on video and tell you when your city opens.</p></details>
   </section>
 
   <footer>
@@ -232,12 +240,12 @@ const CONFIG = {
   SIGNUP_ENDPOINT: "https://script.google.com/macros/s/AKfycbycMhKz4rzuicJZFu7vVu3lEPGxZmkeSQFirGYmabKSy5cEqwN75IdAd6qQcfOENrVY/exec",
   TEST_ID: "bookclub-landing-01",
   BOOKS: [
-    { id: "pride", t: "Pride and Prejudice", a: "Jane Austen", c: "#7a2e3b", when: "Tue 7:30 pm ET", pace: "3 meetings, ~120 pages each", taken: 4 },
-    { id: "gatsby", t: "The Great Gatsby", a: "F. Scott Fitzgerald", c: "#1f5c63", when: "Thu 8:00 pm ET", pace: "1 meeting, whole book", taken: 3 },
-    { id: "frank", t: "Frankenstein", a: "Mary Shelley", c: "#2c2f45", when: "Sun 6:00 pm ET", pace: "2 meetings, ~140 pages each", taken: 5 },
-    { id: "women", t: "Little Women", a: "Louisa May Alcott", c: "#8a5a1f", when: "Wed 7:00 pm ET", pace: "3 meetings, ~160 pages each", taken: 2 },
-    { id: "monte", t: "The Count of Monte Cristo", a: "Alexandre Dumas", c: "#3d4f2a", when: "Mon 8:00 pm ET", pace: "6 meetings, ~200 pages each", taken: 3 },
-    { id: "heights", t: "Wuthering Heights", a: "Emily Brontë", c: "#4b3a5e", when: "Sat 11:00 am ET", pace: "2 meetings, ~170 pages each", taken: 4 }
+    { id: "dcc", t: "Dungeon Crawler Carl", a: "Matt Dinniman", c: "#1f5c63", when: "Thu 8:00 pm ET", pace: "2 meetings, ~225 pages each", taken: 4 },
+    { id: "correspondent", t: "The Correspondent", a: "Virginia Evans", c: "#7a2e3b", when: "Tue 7:30 pm ET", pace: "2 meetings, ~185 pages each", taken: 3 },
+    { id: "housemaid", t: "The Housemaid", a: "Freida McFadden", c: "#2c2f45", when: "Sun 6:00 pm ET", pace: "1 meeting, whole book", taken: 5 },
+    { id: "women", t: "The Women", a: "Kristin Hannah", c: "#8a5a1f", when: "Wed 7:00 pm ET", pace: "3 meetings, ~160 pages each", taken: 2 },
+    { id: "heated", t: "Heated Rivalry", a: "Rachel Reid", c: "#4b3a5e", when: "Fri 8:00 pm ET", pace: "2 meetings, ~185 pages each", taken: 4 },
+    { id: "phm", t: "Project Hail Mary", a: "Andy Weir", c: "#3d4f2a", when: "Mon 8:00 pm ET", pace: "3 meetings, ~160 pages each", taken: 3 }
   ]
 };
 const SEAT_COLORS = ["#5a6fb3", "#b35a7a", "#3f8f7a", "#9a6a2f", "#6a5ab3"];
@@ -312,7 +320,7 @@ function choose(b, btn) {
 
 function format() { return document.querySelector('input[name="format"]:checked').value; }
 function updateWhere() {
-  $("clubWhere").textContent = format() === "video" ? "Video call, link sent by email" : "A partner café in your city";
+  $("clubWhere").textContent = format() === "video" ? "Video call, link sent by email" : "A public spot in your city";
 }
 document.querySelectorAll('input[name="format"]').forEach((r) => r.addEventListener("change", () => {
   $("cityWrap").hidden = format() !== "in-person";
@@ -324,10 +332,10 @@ $("join").addEventListener("submit", async (e) => {
   const email = $("email").value.trim();
   const err = $("err"); err.hidden = true;
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = "Enter an email address like name@example.com."; err.hidden = false; $("email").focus(); return; }
-  if (format() === "in-person" && !$("city").value.trim()) { err.textContent = "Add your city or zip code so we can find a café near you."; err.hidden = false; $("city").focus(); return; }
+  if (format() === "in-person" && !$("city").value.trim()) { err.textContent = "Add your city so we can match you with readers near you."; err.hidden = false; $("city").focus(); return; }
   const row = {
     email, book: chosen.id, book_title: chosen.t, slot: chosen.when,
-    format: format(), city: $("city").value.trim(),
+    format: format(), city: $("city").value.trim(), venue: format() === "in-person" ? $("venue").value.trim() : "",
     test_id: CONFIG.TEST_ID, at: new Date().toISOString(),
     source: SOURCE
   };
