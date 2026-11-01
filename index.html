@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Pagemates Landing Page</title>
+<title>Pagemates · Pick a book, we'll find your club</title>
+<meta name="description" content="Small book clubs of 4 to 6 readers, matched by book and schedule. Meet on video or at a café near you. First club free.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -228,7 +229,7 @@ footer { color: var(--muted); font-size: 13px; padding: 34px 0 40px; }
 const CONFIG = {
   // Where signups go on a real host (Silvio's collector, Formspree, a Google Apps Script…).
   // Leave empty inside the claude.ai preview: the page then uses its own database.
-  SIGNUP_ENDPOINT: "",
+  SIGNUP_ENDPOINT: "https://script.google.com/macros/s/AKfycbycMhKz4rzuicJZFu7vVu3lEPGxZmkeSQFirGYmabKSy5cEqwN75IdAd6qQcfOENrVY/exec",
   TEST_ID: "bookclub-landing-01",
   BOOKS: [
     { id: "pride", t: "Pride and Prejudice", a: "Jane Austen", c: "#7a2e3b", when: "Tue 7:30 pm ET", pace: "3 meetings, ~120 pages each", taken: 4 },
