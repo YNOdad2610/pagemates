@@ -272,8 +272,9 @@ function renderShelf() {
     btn.className = "book"; btn.type = "button";
     btn.style.background = b.c;
     btn.setAttribute("aria-pressed", "false");
-    btn.setAttribute("aria-label", `${b.t} by ${b.a}, ${6 - b.taken} seats left`);
-    btn.innerHTML = `<span class="seats">${6 - b.taken} left</span><span class="t"></span><span class="a"></span>`;
+    const left = 6 - b.taken, leftWord = left === 1 ? "seat" : "seats";
+    btn.setAttribute("aria-label", `${b.t} by ${b.a}, ${left} ${leftWord} left`);
+    btn.innerHTML = `<span class="seats">${left} left</span><span class="t"></span><span class="a"></span>`;
     btn.querySelector(".t").textContent = b.t;
     btn.querySelector(".a").textContent = b.a;
     btn.addEventListener("click", () => choose(b, btn));
